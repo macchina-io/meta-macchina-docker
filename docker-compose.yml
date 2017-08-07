@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  macchina.io:
+    build: .
+    image: macchinaio/macchina.io
+    container_name: macchina.io
+    ports:
+      - 22080:22080
