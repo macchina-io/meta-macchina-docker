@@ -1,9 +1,14 @@
-version: '2'
-
+version: '3.0'
 services:
-  macchina.io:
+  macchina-edge-ce:
+    image: "macchina/edge-ce"
     build: .
-    image: macchinaio/macchina.io
-    container_name: macchina.io
     ports:
       - 22080:22080
+    volumes:
+      - logvolume:/opt/macchina/var/log
+      - datavolume:/opt/macchina/var/lib
+
+volumes:
+    logvolume:
+    datavolume:
