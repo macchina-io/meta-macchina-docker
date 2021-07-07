@@ -5,13 +5,17 @@ a Docker image with [macchina.io EDGE](https://https://github.com/macchina-io/ma
 
 ## Build
 
-To build this image locally, run the following command:
+To build this image locally, run the following command (with `docker-compose` installed):
 
-    $ docker-compose build
+```
+$ docker-compose build
+```
 
-or directly by docker:
+or directly by running `docker`:
 
-    $ docker build . -t macchina/edge-ce
+```
+$ docker build . -t macchina/edge-ce
+```
 
 ## Run
 
@@ -34,7 +38,13 @@ following environment variables can be set:
   - `TLS_SERVER_CERT`: Path to X509 certificate file in PEM format for secure web server (default: `/opt/macchina/etc/macchina.pem`)
   - `TLS_SERVER_KEY`: Path to certificate private key file (default: `/opt/macchina/etc/macchina.pem`)
   - `LOGPATH`: Path of log file (default: `/opt/macchina/var/log/macchina.log`)
-  - `LOGLEVEL`: Log level (`debug`, `information`, `notice`, `warning`, `error`, `critical`, `fatal`, `non`; default: `information`)
+  - `LOGLEVEL`: Log level (`debug`, `information`, `notice`, `warning`, `error`, `critical`, `fatal`, `none`; default: `information`)
   - `LOGCHANNEL`: Default log channel (`console` or `file`; default: `console`)
-  - `ADMIN_PASSWORD_HASH`: MD-5 hash of `edgeadmin` account password
-  - `USER_PASSWORD_HASH`: MD-5 hash of `edgeuser` account password
+  - `ADMIN_PASSWORD_HASH`: MD5 hash of `edgeadmin` account password
+  - `USER_PASSWORD_HASH`: MD5 hash of `edgeuser` account password
+
+Note: you can generate the MD5 password hash with the following command:
+
+```
+$ echo -n "password" | md5sum
+```
