@@ -1,7 +1,8 @@
 # Dockerfile for macchina.io EDGE
 
 This repository contains a Dockerfile and related files for building
-a Docker image with [macchina.io EDGE](https://https://github.com/macchina-io/macchina.io).
+a Docker image with [macchina.io EDGE](https://https://github.com/macchina-io/macchina.io),
+based on Alpine Linux.
 
 ## Build
 

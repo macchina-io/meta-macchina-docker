@@ -5,21 +5,20 @@
 #
 # Stage 1: Build
 #
-FROM ubuntu:20.04 as buildstage
+FROM alpine:latest AS buildstage
 
 # Install required components for building
-RUN apt-get -y update \
- && apt-get -y install \
+RUN apk update \
+ && apk add \
  	git \
     g++ \
+    linux-headers \
     make \
-    libssl-dev \
+    openssl-dev \
     python2
 
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 1
-
 # Create user
-RUN adduser --system --group build
+RUN addgroup -S build && adduser -S -G build build
 
 # Setup Directories
 RUN mkdir -p /home/build/source \
@@ -42,13 +41,13 @@ RUN cd /home/build/source/macchina.io \
 #
 # Stage 2: Install
 #
-FROM ubuntu:20.04 as runstage
+FROM alpine:latest AS runstage
 
-RUN apt-get -y update \
- && apt-get -y install \
-    libssl1.1 \
-    ca-certificates \
-    bluetooth
+RUN apk update \
+ && apk add \
+    libstdc++ \
+    openssl \
+    ca-certificates
 
 # Copy macchina.io EDGE
 RUN mkdir -p /opt/macchina \
@@ -60,7 +59,7 @@ COPY --from=buildstage /home/build/install /opt/macchina
 ADD macchina.properties /opt/macchina/etc/macchina.properties
 
 # Create user
-RUN adduser --system --group macchina
+RUN addgroup -S macchina && adduser -S -G macchina macchina
 RUN chown -R macchina:macchina /opt/macchina
 USER macchina
 
