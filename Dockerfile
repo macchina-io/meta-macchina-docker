@@ -5,7 +5,7 @@
 #
 # Stage 1: Build
 #
-FROM alpine:latest AS buildstage
+FROM alpine:3.12 AS buildstage
 
 # Install required components for building
 RUN apk update \
@@ -41,7 +41,7 @@ RUN cd /home/build/source/macchina.io \
 #
 # Stage 2: Install
 #
-FROM alpine:latest AS runstage
+FROM alpine:3.12 AS runstage
 
 RUN apk update \
  && apk add \
@@ -58,8 +58,16 @@ RUN mkdir -p /opt/macchina \
 COPY --from=buildstage /home/build/install /opt/macchina
 ADD macchina.properties /opt/macchina/etc/macchina.properties
 
-# Create user
-RUN addgroup -S macchina && adduser -S -G macchina macchina
+# Create user (note: membership in dialout group is required for access to serial ports,
+# including certain USB devices). We also add the gpio group for access to GPIOs on
+# a Raspberry Pi (NOTE: for access to GPIOs (/sys/class/gpio files), the container
+# must be run in privileged mode).
+RUN addgroup -S macchina \
+ && addgroup -g 997 gpio \
+ && adduser -S -G macchina macchina \
+ && adduser macchina dialout \
+ && adduser macchina gpio
+
 RUN chown -R macchina:macchina /opt/macchina
 USER macchina
 

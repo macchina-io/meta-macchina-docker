@@ -31,6 +31,39 @@ or directly by docker:
 Both commands bind port 22080 from docker container to port 22080 on host, so the
 web interface is available at http://localhost:22080
 
+### Accessing Devices
+
+Serial devices and USB devices implementing a virtual serial port can be accessed from
+the container by exposing the device to the container when creating it:
+
+```
+   $ docker run -p 22080:22080 --device=/dev/ttyACM0 macchina/edge-ce
+```
+
+In the above example, the device `/dev/ttyACM0` will be available to macchina.io EDGE
+in the container. Note: on some devices it may also be necessary to add the `macchina`
+user in the container to a specific group in order to be able to access that device.
+On most systems, it is the `dialout` group, and the `Dockerfile` already adds the `macchina`
+user to that group. If another group is required, the `Dockerfile` must be changed.
+
+To access Linux GPIO devices (via `/sys/class/gpio`, as implemented in the macchina.io EDGE
+Linux GPIO support), the container must be run in privileged mode:
+
+```
+   $ docker run -p 22080:22080 --privileged macchina/edge-ce
+```
+
+The `Dockerfile` creates the `gpio` group (997), in order for GPIO support to work
+on a Raspberry Pi, and adds the `macchina` user to that group. For other devices,
+this may have to be changed in the `Dockerfile`.
+
+The necessary configuration settings for enable certain devices can be made in the
+*Settings* app in the macchina.io EDGE web interface. After adding or changing the
+necessary configuration properties, don't forget to save the configuration and
+restart the affected bundles for the configuration changes to take effect.
+
+### Configuration
+
 Some configuration settings can be changed via environment variables. The
 following environment variables can be set:
 
