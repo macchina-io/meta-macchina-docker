@@ -20,7 +20,7 @@ jobs:
         name: Push Docker Image
         run: docker push macchina/edge-ce:latest-amd64
 
-  docker-build-armv7:
+  docker-build-armv327:
     runs-on: ubuntu-20.04
     steps:
       -
@@ -51,7 +51,7 @@ jobs:
             --tag macchina/edge-ce:latest-arm32v7 \
             --file ./Dockerfile .
 
-  docker-build-armv64:
+  docker-build-armv64v8:
     runs-on: ubuntu-20.04
     steps:
       -
@@ -84,7 +84,7 @@ jobs:
 
   docker-manifest:
     runs-on: ubuntu-20.04
-    needs: docker-build-amd64, docker-build-armv7, docker-build-arm64
+    needs: ["docker-build-amd64", "docker-build-arm32v7", "docker-build-arm64v8"]
     steps:
       -
         name: Login to hub.docker.com
