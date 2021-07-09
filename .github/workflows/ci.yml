@@ -84,7 +84,7 @@ jobs:
 
   docker-manifest:
     runs-on: ubuntu-20.04
-    needs: docker-build-x86_64, docker-build-armv7, docker-build-arm64
+    needs: docker-build-amd64, docker-build-armv7, docker-build-arm64
     steps:
       -
         name: Login to hub.docker.com
