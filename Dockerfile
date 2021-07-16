@@ -95,7 +95,6 @@ ENV USER_PASSWORD_HASH=41d3d2ef29df3a55d6eb8d4fd4ca3624
 
 ENV LD_LIBRARY_PATH=/opt/macchina/lib:/opt/macchina/var/cache/bundles
 ENV LD_PRELOAD=/opt/macchina/lib/libmimalloc.so
-ENV MIMALLOC_VERBOSE=1
 
 VOLUME /opt/macchina/var/log
 VOLUME /opt/macchina/var/lib
