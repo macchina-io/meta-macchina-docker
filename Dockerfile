@@ -14,7 +14,6 @@ RUN apk update \
     g++ \
     linux-headers \
     make \
-    cmake \
     openssl-dev \
     python2
 
@@ -37,18 +36,6 @@ RUN cd /home/build/source \
 RUN cd /home/build/source/macchina.io \
 	&& make -s -j8 DEFAULT_TARGE=shared_release PRODUCT=runtime -j`nproc` \
 	&& make PRODUCT=runtime INSTALLDIR=/home/build/install install
-
-# Fetch mimalloc
-RUN cd /home/build/source \
-	&& git clone https://github.com/microsoft/mimalloc.git
-
-# Build mimalloc
-RUN cd /home/build/source/mimalloc \
-	&& mkdir cmake-build \
-	&& cd cmake-build \
-	&& cmake .. \
-	&& make -s \
-	&& cp libmimalloc.so /home/build/install/lib
 
 #
 # Stage 2: Install
@@ -94,7 +81,6 @@ ENV ADMIN_PASSWORD_HASH=6647921ab0216b5ed98d0d36bb621945
 ENV USER_PASSWORD_HASH=41d3d2ef29df3a55d6eb8d4fd4ca3624
 
 ENV LD_LIBRARY_PATH=/opt/macchina/lib:/opt/macchina/var/cache/bundles
-ENV LD_PRELOAD=/opt/macchina/lib/libmimalloc.so
 
 VOLUME /opt/macchina/var/log
 VOLUME /opt/macchina/var/lib

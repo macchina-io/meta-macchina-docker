@@ -2,8 +2,7 @@
 
 This repository contains a Dockerfile and related files for building
 a Docker image with [macchina.io EDGE](https://https://github.com/macchina-io/macchina.io),
-based on Alpine Linux, with [mimalloc](https://github.com/microsoft/mimalloc) as replacement
-for the musl `malloc()` implementation, which is known to have some performance issues.
+based on Alpine Linux.
 
 ## Build
 
