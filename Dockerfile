@@ -5,20 +5,21 @@
 #
 # Stage 1: Build
 #
-FROM alpine:3.12 AS buildstage
+FROM ubuntu:20.04 AS buildstage
 
 # Install required components for building
-RUN apk update \
- && apk add \
- 	git \
-    g++ \
-    linux-headers \
-    make \
-    openssl-dev \
-    python2
+RUN apt-get -y update \
+ && apt-get -y install \
+	g++ \
+	git \
+	libssl-dev \
+	make \
+	python2
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 1
 
 # Create user
-RUN addgroup -S build && adduser -S -G build build
+RUN adduser --system --group build
 
 # Setup Directories
 RUN mkdir -p /home/build/source \
@@ -40,12 +41,11 @@ RUN cd /home/build/source/macchina.io \
 #
 # Stage 2: Install
 #
-FROM alpine:3.12 AS runstage
+FROM ubuntu:20.04 AS runstage
 
-RUN apk update \
- && apk add \
-    libstdc++ \
-    openssl \
+RUN apt-get -y update \
+ && apt-get -y install \
+    libssl1.1 \
     ca-certificates
 
 # Copy macchina.io EDGE
@@ -61,9 +61,8 @@ ADD macchina.properties /opt/macchina/etc/macchina.properties
 # including certain USB devices). We also add the gpio group for access to GPIOs on
 # a Raspberry Pi (NOTE: for access to GPIOs (/sys/class/gpio files), the container
 # must be run in privileged mode).
-RUN addgroup -S macchina \
- && addgroup -g 997 gpio \
- && adduser -S -G macchina macchina \
+RUN adduser --system --group macchina \
+ && addgroup --system --gid 997 gpio \
  && adduser macchina dialout \
  && adduser macchina gpio
 

@@ -1,7 +1,7 @@
 version: '3.0'
 services:
   macchina-edge-ce:
-    image: "macchina/edge-ce"
+    image: "macchina/edge-ce:ubuntu"
     build: .
     ports:
       - 22080:22080

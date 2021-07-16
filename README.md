@@ -2,7 +2,7 @@
 
 This repository contains a Dockerfile and related files for building
 a Docker image with [macchina.io EDGE](https://https://github.com/macchina-io/macchina.io),
-based on Alpine Linux.
+based on Ubuntu 20.04.
 
 ## Build
 
@@ -15,7 +15,7 @@ $ docker-compose build
 or directly by running `docker`:
 
 ```
-$ docker build . -t macchina/edge-ce
+$ docker build . -t macchina/edge-ce:ubuntu
 ```
 
 ## Run
@@ -26,7 +26,7 @@ To start a macchina.io EDGE container locally, you can execute:
 
 or directly by docker:
 
-    $ docker run -p 22080:22080 macchina/edge-ce
+    $ docker run -p 22080:22080 macchina/edge-ce:ubuntu
 
 Both commands bind port 22080 from docker container to port 22080 on host, so the
 web interface is available at http://localhost:22080
@@ -37,7 +37,7 @@ Serial devices and USB devices implementing a virtual serial port can be accesse
 the container by exposing the device to the container when creating it:
 
 ```
-   $ docker run -p 22080:22080 --device=/dev/ttyACM0 macchina/edge-ce
+   $ docker run -p 22080:22080 --device=/dev/ttyACM0 macchina/edge-ce:ubuntu
 ```
 
 In the above example, the device `/dev/ttyACM0` will be available to macchina.io EDGE

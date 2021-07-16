@@ -15,10 +15,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       -
         name: Build Docker Image
-        run: docker build . -t macchina/edge-ce:latest-amd64
+        run: docker build . -t macchina/edge-ce:ubuntu-amd64
       -
         name: Push Docker Image
-        run: docker push macchina/edge-ce:latest-amd64
+        run: docker push macchina/edge-ce:ubuntu-amd64
 
   docker-build-arm32v7:
     runs-on: ubuntu-20.04
@@ -48,7 +48,7 @@ jobs:
           docker buildx build \
             --platform linux/arm/v7 \
             --output "type=image,push=true" \
-            --tag macchina/edge-ce:latest-arm32v7 \
+            --tag macchina/edge-ce:ubuntu-arm32v7 \
             --file ./Dockerfile .
 
   docker-build-arm64v8:
@@ -79,12 +79,12 @@ jobs:
           docker buildx build \
             --platform linux/arm64 \
             --output "type=image,push=true" \
-            --tag macchina/edge-ce:latest-arm64v8 \
+            --tag macchina/edge-ce:ubuntu-arm64v8 \
             --file ./Dockerfile .
 
   docker-manifest:
     runs-on: ubuntu-20.04
-    needs: ["docker-build-amd64", "docker-build-arm32v7", "docker-build-arm64v8"]
+    needs: ["docker-build-ubuntu-amd64", "docker-build-ubuntu-arm32v7", "docker-build-ubuntu-arm64v8"]
     steps:
       -
         name: Login to hub.docker.com
@@ -96,10 +96,10 @@ jobs:
         name: Create Manifest
         run: |
           docker manifest create \
-            macchina/edge-ce:latest \
-            --amend macchina/edge-ce:latest-amd64 \
-            --amend macchina/edge-ce:latest-arm32v7 \
-            --amend macchina/edge-ce:latest-arm64v8
+            macchina/edge-ce:ubuntu \
+            --amend macchina/edge-ce:ubuntu-amd64 \
+            --amend macchina/edge-ce:ubuntu-arm32v7 \
+            --amend macchina/edge-ce:ubuntu-arm64v8
       -
         name: Publish Manifest
-        run: docker manifest push macchina/edge-ce:latest
+        run: docker manifest push macchina/edge-ce:ubuntu
